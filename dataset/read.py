@@ -27,7 +27,7 @@ year_map = {}
 year_label = '#title = mean sea level anomaly global ocean (66S to 66N) (Annual signals retained) '
 for row in sea_level:
     year = int(float(row[year_label]))
-    mean = sum([float(num) for num in row[None] if num != ''])
+    mean = sum([float(num) for num in row[None] if num != '']) / 3 - row[None].count('')
     if year in year_map:
         year_map[year] = year_map[year] + 1
     else:
@@ -45,7 +45,7 @@ for y in year_map:
 
 GHG_map = {}
 for row in GHG_lst:
-    GHG_map[int(row['Year'])] = float(row['N2O'])
+    GHG_map[int(row['Year'])] = float(row['CH4'])
 
 x_values = list(range(1992, 2019))
 x = [GHG_map[year] for year in x_values]
