@@ -27,7 +27,7 @@ year_map = {}
 year_label = '#title = mean sea level anomaly global ocean (66S to 66N) (Annual signals retained) '
 for row in sea_level:
     year = int(float(row[year_label]))
-    mean = sum([float(num) for num in row[None] if num != '']) / 3 - row[None].count('')
+    mean = sum([float(num) for num in row[None] if num != '']) / (4 - row[None].count(''))
     if year in year_map:
         year_map[year] = year_map[year] + 1
     else:
