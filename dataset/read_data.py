@@ -116,15 +116,3 @@ def average_per_year(sea_mapping: dict) -> dict:
         sealevel_per_year[year] = total_per_year / datapoints_per_year
 
     return sealevel_per_year
-
-
-def build_figure(x, y):
-    return px.scatter(x=x, y=y)
-
-
-
-data = read_sea_level_data('C:/Users/mengh/Desktop/csc110/FINAL PROJECT/dataset/sea_levels.csv')
-sd = sea_level_to_dict(data)
-
-
-pprint(sd)
