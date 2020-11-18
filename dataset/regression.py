@@ -27,11 +27,14 @@ def predict_data(x: float , model: LinearRegression) -> float:
     return m * x + b
 
 
-def plot_data(x_values: List[float], y_values: List[float], model: LinearRegression) -> None:
+def plot_data(x_values: List[float], y_values: List[float], model: LinearRegression, title: str) -> None:
     x_range = [min(x_values), max(x_values)]
     y_range = [predict_data(x_range[0], model), predict_data(x_range[1], model)]
 
-    fig = px.scatter(x=x_values, y=y_values)
+    fig = px.scatter(x=x_values,
+                     y=y_values,
+                     title=title,
+                     labels = {'x': "Greenhouse Gas Emissions (kt)", 'y': "Mean Sea Level (mm)"})
     fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
     fig.show()
 
@@ -41,8 +44,8 @@ sea_data = read_sea_level_data('sea_levels.csv')
 sea_dict = sea_level_to_dict(sea_data)
 
 
-total = [datapoint.ch4 for datapoint in ghg_data if datapoint.year in range(1992, 2019)]
+total = [datapoint.total for datapoint in ghg_data if datapoint.year in range(1992, 2019)]
 sea_level =[sea_dict[year] for year in range(1992, 2019)]
 
 model = build_model(total, sea_level)
-plot_data(total, sea_level, model)
+plot_data(total, sea_level, model, 'Data')
