@@ -6,17 +6,17 @@ from typing import List, Dict
 
 @dataclass
 class GreenhouseGas:
-    """ dataclass representing greenhouse gas emissions of a province in a given year
+    """ dataclass representing greenhouse gas emissions of a region in a given year
 
     Instance Attributes:
         - year: year of the given data
-        - region: province/territory of the given data
-        - co2: amount of co2 emissions in the given year for the given province
-        - ch4: amount of ch4 emissions in the given year for the given province
-        - hfc: amount of HPC emissions in the given year for the given province
-        - pfc: amount of PFC emissions in the given year for the given province
-        - sf6: amount of sf6 emissions in the given year for the given province
-        - nf3: amount of nf3 emissions in the given year for the given province
+        - region: region of the given data
+        - co2: amount of co2 emissions in the given year for the given region
+        - ch4: amount of ch4 emissions in the given year for the given region
+        - hfc: amount of HPC emissions in the given year for the given region
+        - pfc: amount of PFC emissions in the given year for the given region
+        - sf6: amount of sf6 emissions in the given year for the given region
+        - nf3: amount of nf3 emissions in the given year for the given region
         - total: the total amount of greenhouse gas emissions in data
     """
     year: int
@@ -24,23 +24,57 @@ class GreenhouseGas:
     co2: float
     ch4: float
     n2o: float
-    # hfc: float
-    # pfc: float
-    # sf6: float
-    # nf3: float
+    hfc: float
+    pfc: float
+    sf6: float
+    nf3: float
     total: float
 
 
-# class Province:
-#     """ A class representing the data of a Province"""
-#     name: str
-#     _data: List[GreenhouseGas]
-#     co2: List[float]
-#     pass
+class Province:
+    """ A class representing the data of a Province"""
+    _data: List[GreenhouseGas]
+    _dict_data: dict
+    name: str
+    co2: List[float]
+    ch4: List[float]
+    n2o: List[float]
+    total: List[float]
 
-#     def __init__(self, name, data) -> None:
-#         self.name = name
-#         self.data = data
+    def __init__(self, data: List[GreenhouseGas]) -> None:
+        self.name = data[0].region
+        self._data = data
+        self._dict_data = self.sort_ghg_data()
+        self.co2 = self.combine_as_list(0)
+        self.ch4 = self.combine_as_list(1)
+        self.n2o = self.combine_as_list(2)
+        self.total = self.combine_as_list(3)
+
+    def sort_ghg_data(self) -> List[GreenhouseGas]:
+        sorted_dict = {}
+        for row in self._data:
+            sorted_dict[row.year] = [row.co2, row.ch4, row.n2o, row.total]
+
+        return sorted_dict
+
+    def combine_as_list(self, index: int) -> List[float]:
+        list_so_far = []
+        for year in self._dict_data:
+            list_so_far.append(self._dict_data[year][index])
+
+        return list_so_far
+
+    def trim_data(self, start: int, end: int) -> None:
+        trimmed_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
+
+        # updating dict_data
+        self._dict_data = trimmed_dict
+
+        # trimming the lists by updating them
+        self.co2 = self.combine_as_list(0)
+        self.ch4 = self.combine_as_list(1)
+        self.n2o = self.combine_as_list(2)
+        self.total = self.combine_as_list(3)
 
 
 class Bird:
@@ -85,7 +119,8 @@ class Bird:
         >>> bird.data_to_list()
         [1.0, 2.0, 3.0]
         """
-        return [self.dict_data[year] for year in self.dict_data]
+        return [self.dict_data[year] for year in range(1990, 2017)]
+
 
 def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
     """ Return a list of GreenhouseGas instances, where each instance in
@@ -108,10 +143,10 @@ def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
                                           co2=float(row[5]),
                                           ch4=float(row[6]),
                                           n2o=float(row[8]),
-                                        #   hfc=float(row[10]),
-                                        #   pfc=float(row[11]),
-                                        #   sf6=float(row[12]),
-                                        #   nf3=float(row[13]),
+                                          hfc=float(row[10]),
+                                          pfc=float(row[11]),
+                                          sf6=float(row[12]),
+                                          nf3=float(row[13]),
                                           total=float(row[14])))
 
     return ghg_data
@@ -139,6 +174,7 @@ def read_bird_data() -> dict:
                                           row[9]]
         return bird_data
 
+
 def filter_bird_data(bird_data: dict, column: int) -> dict:
     """ Return a dictionary mapping the years in bird_data to a
         specific column in the data
@@ -160,4 +196,3 @@ def filter_bird_data(bird_data: dict, column: int) -> dict:
 
     return filtered_dict
 
-# def filter_ghg_data(ghg_data: List[GreenhouseGas]) -> List[float]:

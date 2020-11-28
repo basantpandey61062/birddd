@@ -23,7 +23,6 @@ class RegressionModel:
         x_data = arrays[0]
         y_data = arrays[1]
         model = LinearRegression().fit(x_data, y_data)
-
         return model
 
     def predict_data(self, x: float) -> float:
@@ -62,13 +61,14 @@ def lists_to_array(x: list, y: list) -> tuple:
 #########################################################################################################################
 
 ghg_data = read_ghg_data(29)
-co2 = [data.ch4 for data in ghg_data if 1990 <= data.year <= 2016]
-
+alberta = Province(ghg_data)
+alberta.trim_data(1990, 2016)
 
 bird_data = read_bird_data()
-waterfowl_data = filter_bird_data(bird_data, 8)
-waterfowl = Bird(waterfowl_data)
-waterfowl.trim_data(1990, 2016)
+bird_data = filter_bird_data(bird_data, 8)
+bird = Bird(bird_data)
+bird.trim_data(1990, 2016)
 
-model = RegressionModel(co2, waterfowl.list_data)
+
+model = RegressionModel(alberta.ch4, bird.list_data)
 model.plot_data('Test')
