@@ -62,7 +62,7 @@ def lists_to_array(x: list, y: list) -> tuple:
 #########################################################################################################################
 
 ghg_data = read_ghg_data(29)
-co2 = [data.co2 for data in ghg_data if 1990 <= data.year <= 2016]
+co2 = [data.ch4 for data in ghg_data if 1990 <= data.year <= 2016]
 
 
 bird_data = read_bird_data()
@@ -70,9 +70,5 @@ waterfowl_data = filter_bird_data(bird_data, 8)
 waterfowl = Bird(waterfowl_data)
 waterfowl.trim_data(1990, 2016)
 
-
-model = RegressionModel(co2, waterfowl_data)
-model.plot_data(co2, waterfowl_data, 'Test')
-
-
-
+model = RegressionModel(co2, waterfowl.list_data)
+model.plot_data('Test')

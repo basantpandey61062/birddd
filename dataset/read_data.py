@@ -3,8 +3,6 @@ from dataclasses import dataclass
 import plotly.express as px
 from typing import List, Dict
 
-from scipy.sparse import data
-
 
 @dataclass
 class GreenhouseGas:
@@ -32,23 +30,26 @@ class GreenhouseGas:
     # nf3: float
     total: float
 
-    # def __init__(self, year, region, co2, ch4, n2o, total) -> None:
-    #     self.year = year
-    #     self.region = region
-    #     self.co2 = co2
-    #     self.ch4 = ch4
-    #     self.n2o = n2o
-    #     self.total = total
 
+# class Province:
+#     """ A class representing the data of a Province"""
+#     name: str
+#     _data: List[GreenhouseGas]
+#     co2: List[float]
+#     pass
+
+#     def __init__(self, name, data) -> None:
+#         self.name = name
+#         self.data = data
 
 
 class Bird:
     """ An class representing a the data of a bird species """
-    data: dict
+    dict_data: dict
     list_data: list
 
     def __init__(self, bird_data: dict) -> None:
-        self.data = bird_data
+        self.dict_data = bird_data
         self.list_data = self.data_to_list()
 
     def trim_data(self, start: int, end: int) -> None:
@@ -67,15 +68,15 @@ class Bird:
         >>> bird.data
         {2000: 1.0, 2001: 2.0}
         """
-        self.data = {year: self.data[year] for year in range(start, end + 1)}
+        self.dict_data = {year: self.dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
-        self.data_to_list()
+        self.list_data = self.data_to_list()
 
     def find_first_point(self) -> int:
         """ Return the first year where the data is not 'n/a' """
-        for year in self.data:
-            if self.data[year] != 'n/a':
+        for year in self.dict_data:
+            if self.dict_data[year] != 'n/a':
                 return year
 
     def data_to_list(self) -> float:
@@ -84,7 +85,7 @@ class Bird:
         >>> bird.data_to_list()
         [1.0, 2.0, 3.0]
         """
-        return [self.data[year] for year in self.data]
+        return [self.dict_data[year] for year in self.dict_data]
 
 def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
     """ Return a list of GreenhouseGas instances, where each instance in
