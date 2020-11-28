@@ -45,9 +45,11 @@ class GreenhouseGas:
 class Bird:
     """ An class representing a the data of a bird species """
     data: dict
+    list_data: list
 
     def __init__(self, bird_data: dict) -> None:
         self.data = bird_data
+        self.list_data = self.data_to_list()
 
     def trim_data(self, start: int, end: int) -> None:
         """ Create a new dict that contains all bird data from the year <start> to
@@ -66,6 +68,9 @@ class Bird:
         {2000: 1.0, 2001: 2.0}
         """
         self.data = {year: self.data[year] for year in range(start, end + 1)}
+
+        # updates the list attribute to match the trimmed data
+        self.data_to_list()
 
     def find_first_point(self) -> int:
         """ Return the first year where the data is not 'n/a' """
