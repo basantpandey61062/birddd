@@ -61,10 +61,11 @@ def lists_to_array(x: list, y: list) -> tuple:
 #########################################################################################################################
 
 ghg_data = read_ghg_data(29)
+bird_data = read_bird_data()
+
 alberta = Province(ghg_data)
 alberta.trim_data(1990, 2016)
 
-bird_data = read_bird_data()
 bird_data = filter_bird_data(bird_data, 8)
 bird = Bird(bird_data)
 bird.trim_data(1990, 2016)

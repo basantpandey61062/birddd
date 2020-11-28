@@ -33,8 +33,11 @@ class GreenhouseGas:
 
 class Province:
     """ A class representing the data of a Province"""
+
+    # Private Attributes
     _data: List[GreenhouseGas]
     _dict_data: dict
+
     name: str
     co2: List[float]
     ch4: List[float]
@@ -51,6 +54,10 @@ class Province:
         self.total = self.combine_as_list(3)
 
     def sort_ghg_data(self) -> List[GreenhouseGas]:
+        """Return a dictionary mapping year to a list of greenhouse gas
+        emissions for that year
+        """
+
         sorted_dict = {}
         for row in self._data:
             sorted_dict[row.year] = [row.co2, row.ch4, row.n2o, row.total]
@@ -58,6 +65,14 @@ class Province:
         return sorted_dict
 
     def combine_as_list(self, index: int) -> List[float]:
+        """ Return a list containing all greenhouse gas with index <index>
+
+        The index is based off of the order which the greenhouse gasses appear
+        in the dictionary values (e.g. 0 = co2, 1 = ch4, 2 = n2o ... etc)
+
+        Preconditions:
+         - 0 <= index < 4  # change this as you add more ghg
+        """
         list_so_far = []
         for year in self._dict_data:
             list_so_far.append(self._dict_data[year][index])
@@ -65,6 +80,16 @@ class Province:
         return list_so_far
 
     def trim_data(self, start: int, end: int) -> None:
+        """ Trim and reassign all attributes to new values
+        so that only data between start and end remain.
+
+        Note: After the data is trimmed it cannot be reverted or untrimmed.
+
+        Preconditions:
+         - start < end
+         - 1990 <= start <= 2018
+         - 1990 <= end <= 2018
+        """
         trimmed_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
 
         # updating dict_data
@@ -88,14 +113,14 @@ class Bird:
 
     def trim_data(self, start: int, end: int) -> None:
         """ Create a new dict that contains all bird data from the year <start> to
-            the year <end> and reassign self.data to it.
+        the year <end> and reassign self.data to it.
 
-            Note: After the data is trimmed it cannot be reverted or untrimmed.
+        Note: After the data is trimmed it cannot be reverted or untrimmed.
 
-            Preconditions:
-             - start < end
-             - 1970 <= end <= 2016
-             - 1970 <= start <= 2016
+        Preconditions:
+         - start < end
+         - 1970 <= end <= 2016
+         - 1970 <= start <= 2016
 
         >>> bird = Bird({2000: 1.0, 2001: 2.0, 2003: 3.0})
         >>> bird.trim_data(2000, 2001)
@@ -153,26 +178,29 @@ def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
 
 
 def read_bird_data() -> dict:
-        with open('bird_data.csv') as csvfile:
-            reader = csv.reader(csvfile)
-            # skips headers
-            for _ in range(3):
-                next(reader)
+    """ Read the 'bird_data.csv' file and Return a dictionary
+    mapping each year to a list of
+    """
+    with open('bird_data.csv') as csvfile:
+        reader = csv.reader(csvfile)
+        # skips headers
+        for _ in range(3):
+            next(reader)
 
-            bird_data = {}
+        bird_data = {}
 
-            for _ in range(47):
-                row = next(reader)
-                bird_data[int(row[0])] = [row[1],
-                                          row[2],
-                                          row[3],
-                                          row[4],
-                                          row[5],
-                                          row[6],
-                                          row[7],
-                                          row[8],
-                                          row[9]]
-        return bird_data
+        for _ in range(47):
+            row = next(reader)
+            bird_data[int(row[0])] = [row[1],
+                                      row[2],
+                                      row[3],
+                                      row[4],
+                                      row[5],
+                                      row[6],
+                                      row[7],
+                                      row[8],
+                                      row[9]]
+    return bird_data
 
 
 def filter_bird_data(bird_data: dict, column: int) -> dict:
