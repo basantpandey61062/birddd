@@ -1,10 +1,8 @@
-from read_data import *
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from sklearn.linear_model import LinearRegression
-
-
+from typing import List
 
 class RegressionModel:
     # Private instance attribute
@@ -47,10 +45,11 @@ class RegressionModel:
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
 
+
 # helper function
 def lists_to_array(x: list, y: list) -> tuple:
     """ Return the x and y as a tuple of numpy arrays and
-        reshape the x array to (-1, 1), so that it is one dimensional
+    reshape the x array to (-1, 1), so that it is one dimensional
     """
     x_array = np.array(x).reshape(-1, 1)
     y_array = np.array(y)
@@ -60,16 +59,16 @@ def lists_to_array(x: list, y: list) -> tuple:
 #########################################################################################################################
 #########################################################################################################################
 
-ghg_data = read_ghg_data(29)
-bird_data = read_bird_data()
+# ghg_data = read_ghg_data(29)
+# bird_data = read_bird_data()
 
-alberta = Province(ghg_data)
-alberta.trim_data(1990, 2016)
+# alberta = Province(ghg_data)
+# alberta.trim_data(1990, 2016)
 
-bird_data = filter_bird_data(bird_data, 8)
-bird = Bird(bird_data)
-bird.trim_data(1990, 2016)
+# bird_data = filter_bird_data(bird_data, 8)
+# bird = Bird(bird_data)
+# bird.trim_data(1990, 2016)
 
 
-model = RegressionModel(alberta.ch4, bird.list_data)
-model.plot_data('Test')
+# model = RegressionModel(alberta.ch4, bird.list_data)
+# model.plot_data('Test')

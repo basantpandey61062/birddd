@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass
-import plotly.express as px
 from typing import List, Dict
 
 
