@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from sklearn.linear_model import LinearRegression
 from typing import List
+from read_data import *
 
 class RegressionModel:
     # Private instance attribute
@@ -13,23 +14,43 @@ class RegressionModel:
     def __init__(self, ghg_data: List[float], bird_data: List[float]) -> None:
         self._bird_data = bird_data
         self._ghg_data = ghg_data
-        self._model = self.build_model()
+        self._model = self._build_model()
 
-    def build_model(self) -> LinearRegression():
+    def _build_model(self) -> LinearRegression():
         """ Return the Linear Regression model from the given data """
-        arrays = lists_to_array(self._ghg_data, self._bird_data)
+        arrays = self._lists_to_array(self._ghg_data, self._bird_data)
         x_data = arrays[0]
         y_data = arrays[1]
         model = LinearRegression().fit(x_data, y_data)
         return model
 
-    def predict_data(self, x: float) -> float:
+    def _lists_to_array(self, x: list, y: list) -> tuple:
+        """ Return the x and y as a tuple of numpy arrays and
+        reshape the x array to (-1, 1), so that it is one dimensional
+        """
+        x_array = np.array(x).reshape(-1, 1)
+        y_array = np.array(y)
+
+        return (x_array, y_array)
+
+    def predict_y(self, x: float) -> float:
         """ Return the predicted y value for the given x value based
-        of the LinearRegression model
+        off of the LinearRegression model.
+
+        In other words, given the quantity of greenhouse gas emissions,
+        Return the expected index of change for the bird species
         """
         m = float(self._model.coef_)
         b = float(self._model.intercept_)
         return m * x + b
+
+    def predict_x(self, y: float) -> float:
+        """ Return a float representing the projected change in ghg emissions
+        for an index of change of y based off the LinearRegression model.
+        """
+        m = float(self._model.coef_)
+        b = float(self._model.intercept_)
+        return (y - b) / m
 
     def plot_data(self, title: str) -> None:
         x_range = [min(self._ghg_data), max(self._ghg_data)]
@@ -46,29 +67,18 @@ class RegressionModel:
         fig.show()
 
 
-# helper function
-def lists_to_array(x: list, y: list) -> tuple:
-    """ Return the x and y as a tuple of numpy arrays and
-    reshape the x array to (-1, 1), so that it is one dimensional
-    """
-    x_array = np.array(x).reshape(-1, 1)
-    y_array = np.array(y)
-
-    return (x_array, y_array)
-
 #########################################################################################################################
+# Example Usage
 #########################################################################################################################
 
-# ghg_data = read_ghg_data(29)
-# bird_data = read_bird_data()
+# ghg_data = read_ghg_data(50)  # reads the data
+# alberta = Province(ghg_data['Alberta'])  # creates a Province object
 
-# alberta = Province(ghg_data)
-# alberta.trim_data(1990, 2016)
+# bird_data = read_bird_data()  # reads the bird data
+# bird_data = filter_bird_data(bird_data, 8)  # filters the bird data so that only column 8 remains
+# bird = Bird(bird_data)  # creates an Bird Object
+# bird.trim_data(1990, 2016)  # trims the bird data to match the length of the GHG data
 
-# bird_data = filter_bird_data(bird_data, 8)
-# bird = Bird(bird_data)
-# bird.trim_data(1990, 2016)
-
-
-# model = RegressionModel(alberta.ch4, bird.list_data)
-# model.plot_data('Test')
+# model = RegressionModel(alberta.total, bird.list_data)  # creates the linear regression model
+# model.plot_data('Test')  # plots the data
+# model.predict(69)  # predicts the index of change of bird species for 69 kt of emission
