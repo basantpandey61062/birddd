@@ -68,9 +68,9 @@ class RegressionModel:
         fig.show()
 
 
-class MultipleRegression:
+# class MultipleRegression:
 
-    _model: LinearRegression
+#     _model: LinearRegression
 
 
 
