@@ -3,9 +3,10 @@ import plotly.graph_objects as go
 import plotly.express as px
 from sklearn.linear_model import LinearRegression
 from typing import List
-from read_data import *
 
 class RegressionModel:
+    """ A class representing the linear regression model of the given data """
+
     # Private instance attribute
     _model: LinearRegression
     _ghg_data: List[float]
@@ -52,7 +53,7 @@ class RegressionModel:
         b = float(self._model.intercept_)
         return (y - b) / m
 
-    def plot_data(self, title: str) -> None:
+    def plot_data(self, title: str, x_label: str, y_label: str) -> None:
         x_range = [min(self._ghg_data), max(self._ghg_data)]
         y_range = [self.predict_data(x_range[0]),
                    self.predict_data(x_range[1])]
@@ -60,11 +61,20 @@ class RegressionModel:
         fig = px.scatter(x=self._ghg_data,
                          y=self._bird_data,
                          title=title,
-                         labels = {'x': "Greenhouse Gas Emissions (kt)",
-                                   'y': "Percentage of Change in Bird Population from 1970"})
+                         labels = {'x': x_label,
+                                   'y': y_label})
 
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
+
+
+class MultipleRegression:
+
+    _model: LinearRegression
+
+
+
+
 
 
 #########################################################################################################################
@@ -72,6 +82,7 @@ class RegressionModel:
 #########################################################################################################################
 
 # ghg_data = read_ghg_data(50)  # reads the data
+# keys = ghg_data.keys()  # gets all the possible keys
 # alberta = Province(ghg_data['Alberta'])  # creates a Province object
 
 # bird_data = read_bird_data()  # reads the bird data
@@ -80,5 +91,5 @@ class RegressionModel:
 # bird.trim_data(1990, 2016)  # trims the bird data to match the length of the GHG data
 
 # model = RegressionModel(alberta.total, bird.list_data)  # creates the linear regression model
-# model.plot_data('Test')  # plots the data
+# model.plot_data('Test', 'x', 'y')  # plots the data
 # model.predict(69)  # predicts the index of change of bird species for 69 kt of emission
