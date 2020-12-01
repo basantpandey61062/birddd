@@ -57,7 +57,7 @@ class Province:
 
     # Private Attributes
     _data: List[GreenhouseGas]  # total GHG data
-    _dict_data: Dict[int, float]  # mapping of year to GHG emissions for that year
+    _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
     # Public Attributes
     name: str
@@ -84,7 +84,7 @@ class Province:
         self.nf3 = self.adjust_list(1990, 2016, 6)
         self.total = self.adjust_list(1990, 2016, 7)
 
-    def _sort_ghg_data(self) -> Dict[int, GreenhouseGas]:
+    def _sort_ghg_data(self) -> Dict[int, List[float]]:
         """ Return a dictionary mapping year to a list of greenhouse gas
         emissions for that year
 
@@ -117,7 +117,7 @@ class Province:
          - hfc = 3
          - pfc = 4
          - sf6 = 5
-         - nfc = 6
+         - nf3 = 6
          - total = 7
 
         Preconditions:
@@ -144,8 +144,8 @@ class Bird:
                   ordered by year (oldest data to most recent)
 
     Representation Invariants:
-     - min(self.dict_data) == 1990
-     - max(self.dict_data) == 2016
+     - min(self.dict_data) >= 1990
+     - max(self.dict_data) <= 2016
      - all(is_instance(self.dict_data[year], float) or self.dict_data[year] == 'n/a'
            for year in self.dict_data)
      - all(element in self.dict_data.values() element in self.list_data)
@@ -220,7 +220,7 @@ class Bird:
         return [self.dict_data[year] for year in range(start, end)]
 
 
-def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
+def read_ghg_data(last_row: int) -> Dict[str, List[GreenhouseGas]]:
     """ Return a mapping of province names to a list of GreenhouseGas instances,
     where each instance in the list represents a row in the data set.
 
@@ -238,9 +238,9 @@ def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
         # reads each row in the dataset, up to the <last_row> row
         for _ in range(last_row):
             row = next(reader)
-            province = row[1]
+            province = str(row[1])
 
-            if province  in ghg_data:
+            if province in ghg_data:
                 ghg_data[province].append(GreenhouseGas(year=int(row[0]),
                                                         region=row[1],
                                                         co2=float(row[5]),
@@ -266,9 +266,9 @@ def read_ghg_data(last_row: int) -> List[GreenhouseGas]:
     return ghg_data
 
 
-def read_bird_data() -> Dict[int, str]:
+def read_bird_data() -> Dict[int, List[str]]:
     """ Read the 'bird_data.csv' file and Return a dictionary
-    mapping each year to a list of
+    mapping each year to a list of corresponding row of bird data
     """
     with open('bird_data.csv') as csvfile:
         reader = csv.reader(csvfile)
@@ -292,7 +292,7 @@ def read_bird_data() -> Dict[int, str]:
     return bird_data
 
 
-def filter_bird_data(bird_data: Dict[int, str], column: int) -> Dict[int, any]:
+def filter_bird_data(bird_data: Dict[int, List[str]], column: int) -> Dict[int, any]:
     """ Return a dictionary mapping the years in bird_data to a
     specific column in the data
 

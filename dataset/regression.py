@@ -8,6 +8,7 @@ from typing import List, Tuple
 from read_data import *
 import pandas as pd
 
+
 class RegressionModel:
     """ A class representing the linear regression model of the given data """
 
@@ -68,8 +69,8 @@ class RegressionModel:
         fig = px.scatter(x=self._ghg_data,
                          y=self._bird_data,
                          title=title,
-                         labels = {'x': x_label,
-                                   'y': y_label})
+                         labels={'x': x_label,
+                                 'y': y_label})
 
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
@@ -98,9 +99,9 @@ class MultipleRegression:
         return float(predicted_value)
 
 
-#########################################################################################################################
+########################################################################################################################
 # Example Usage
-#########################################################################################################################
+########################################################################################################################
 
 # ghg_data = read_ghg_data(398)  # reads the data
 # # keys = ghg_data.keys()  # gets all the possible keys
@@ -115,9 +116,9 @@ class MultipleRegression:
 # model.plot_data('Test', 'x', 'y')  # plots the data
 
 
-#########################################################################################################################
-### Multiple Regression Usage
-#########################################################################################################################
+########################################################################################################################
+# Multiple Regression Usage
+########################################################################################################################
 
 # df =  pandas.DataFrame({'co2': canada.co2,
 #                         'ch4': canada.ch4,
