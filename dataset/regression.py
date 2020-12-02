@@ -1,12 +1,9 @@
 import numpy as np
 import pandas
-from pandas.core.frame import DataFrame
 import plotly.graph_objects as go
 import plotly.express as px
 from sklearn.linear_model import LinearRegression
 from typing import List, Tuple
-from read_data import *
-import pandas as pd
 
 
 class RegressionModel:
@@ -75,30 +72,6 @@ class RegressionModel:
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
 
-
-class MultipleRegression:
-    _model: LinearRegression
-
-    def __init__(self, ghg_data: DataFrame, bird_data: List[float]) -> None:
-        self._model = LinearRegression().fit(ghg_data, bird_data)
-
-    def predict_value(
-                    self,
-                    co2: float,
-                    ch4: float,
-                    n2o: float,
-                    hfc: float,
-                    pfc: float,
-                    sf6: float,
-                    nf3: float,
-                    ) -> float:
-        """Return the expected index of change for the species of bird since 1970
-        based on the given greenhouse gas emission values
-        """
-        predicted_value = self._model.predict([[co2, ch4, n2o, hfc, pfc, sf6, nf3]],)
-        return float(predicted_value)
-
-
 ########################################################################################################################
 # Example Usage
 ########################################################################################################################
@@ -111,8 +84,8 @@ class MultipleRegression:
 # bird_data = filter_bird_data(bird_data, 8)  # filters the bird data so that only column 8 remains
 # bird = Bird(bird_data)  # creates an Bird Object
 # bird.trim_data(1990, 2016)  # trims the bird data to match the length of the GHG data
-# model = RegressionModel(alberta.total, bird.list_data)  # creates the linear regression model
-# model.predict_y(69)  # predicts the index of change of bird species for 69 kt of emission
+# model = RegressionModel(canada.total, bird.list_data)  # creates the linear regression model
+# # model.predict_y(69)  # predicts the index of change of bird species for 69 kt of emission
 # model.plot_data('Test', 'x', 'y')  # plots the data
 
 
@@ -120,6 +93,7 @@ class MultipleRegression:
 # Multiple Regression Usage
 ########################################################################################################################
 
+# some default thing you need to set
 # df =  pandas.DataFrame({'co2': canada.co2,
 #                         'ch4': canada.ch4,
 #                         'n2o': canada.n2o,
@@ -128,4 +102,16 @@ class MultipleRegression:
 #                         'sf6': canada.sf6,
 #                         'nf3': canada.nf3})
 
-# model = MultipleRegression(df[['co2', 'ch4', 'n2o', 'hfc', 'pfc', 'sf6', 'nf3']], bird.list_data)
+# Builds Multiple Regression model. You can just copy and past this part and change some variables
+# You need the df tho.
+# model = LinearRegression().fit(df[['co2', 'ch4', 'n2o', 'hfc', 'pfc', 'sf6', 'nf3']],
+#                                                    bird.list_data)
+
+# You can use this to output the equation of the line to the user maybe
+# model.coef_  # gets coefficients for the equation representing the model
+
+# Predicting the data
+# model.predict(co2, ch4, n2o, hfc, pfc, sf6, nf3)  # predicts the data takes SEVEN parameters
+# Note: the function above doesn't output a float.
+# Instead you should wrap the float around it like the following
+# float(model.predict(co2, ch4, n2o, hfc, pfc, sf6, nf3))
