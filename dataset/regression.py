@@ -9,7 +9,7 @@ from typing import List, Tuple
 class RegressionModel:
     """ A class representing the linear regression model of the given data """
 
-    # Private instance attribute
+    # Private instance attributes
     _model: LinearRegression
     _ghg_data: List[float]
     _bird_data: List[float]
@@ -47,8 +47,8 @@ class RegressionModel:
         return (y - b) / m
 
     def get_r_squared(self) -> float:
-        """ Return the R^2 value for the model and data"""
-        return self._model.score(self._ghg_data, self._bird_data)
+        x, y = _lists_to_array(self._ghg_data, self._bird_data)
+        return self._model.score(x, y)
 
     def plot_data(self, title: str, x_label: str, y_label: str) -> None:
         """Plot the given data with a line of best fit generated from the
@@ -57,16 +57,17 @@ class RegressionModel:
         x_range = [min(self._ghg_data), max(self._ghg_data)]
         y_range = [self.predict_y(x_range[0]),
                    self.predict_y(x_range[1])]
-
         fig = px.scatter(x=self._ghg_data,
                          y=self._bird_data,
-                         title=title,
+                         title= f'{title} {" " * 10} R^2 = {self.get_r_squared()}',
                          labels={'x': x_label,
                                  'y': y_label})
 
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
 
+
+# Helper Function
 def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
     """ Return the x and y as a tuple of numpy arrays and
     reshape the x array to (-1, 1), so that it is one dimensional
