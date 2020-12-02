@@ -21,20 +21,11 @@ class RegressionModel:
 
     def _build_model(self) -> LinearRegression:
         """ Return the Linear Regression model from the given data """
-        arrays = self._lists_to_array(self._ghg_data, self._bird_data)
+        arrays = _lists_to_array(self._ghg_data, self._bird_data)
         x_data = arrays[0]
         y_data = arrays[1]
         model = LinearRegression().fit(x_data, y_data)
         return model
-
-    def _lists_to_array(self, x: list, y: list) -> Tuple[np.array, np.array]:
-        """ Return the x and y as a tuple of numpy arrays and
-        reshape the x array to (-1, 1), so that it is one dimensional
-        """
-        x_array = np.array(x).reshape(-1, 1)
-        y_array = np.array(y)
-
-        return (x_array, y_array)
 
     def predict_y(self, x: float) -> float:
         """ Return the predicted y value for the given x value based
@@ -72,6 +63,16 @@ class RegressionModel:
         fig.add_traces(go.Scatter(x=x_range, y=y_range, name="Regression Line"))
         fig.show()
 
+
+# Helper Function
+def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
+    """ Return the x and y as a tuple of numpy arrays and
+    reshape the x array to (-1, 1), so that it is one dimensional
+    """
+    x_array = np.array(x).reshape(-1, 1)
+    y_array = np.array(y)
+
+    return (x_array, y_array)
 ########################################################################################################################
 # Example Usage
 ########################################################################################################################
