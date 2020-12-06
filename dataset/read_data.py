@@ -104,7 +104,8 @@ class Province:
 
     def adjust_list(self, start: int, end: int, index: int) -> List[float]:
         """ Return a list representing the data of a specific greenhouse gas
-        emissions for self which starts from the year <start> and ends on <end>.
+        emissions for self which starts from the year <start> and ends on <end>,
+        then update the corresponding list attribute respectively.
 
         The index is based off of the order which the greenhouse gasses appear
         in the dictionary values.
@@ -129,7 +130,21 @@ class Province:
         for year in range(start, end + 1):
             trimmed_list.append(self._dict_data[year][index])
 
+        # updating the corresponding instance attribute
+        self._update_list(trimmed_list, index)
+
         return trimmed_list
+
+    def _update_list(self, updated_list: List[float], index: int) -> None:
+        """ Update the greenhouse gas attribute to match the adjusted version
+        """
+        list_mapping = {0: self.co2, 1: self.ch4,
+                        2: self.n2o, 3: self.hfc,
+                        4: self.pfc, 5: self.sf6,
+                        7: self.nf3, 8: self.total}
+
+        list_mapping[index] = updated_list
+
 
 
 class Bird:
