@@ -37,33 +37,52 @@ class GreenhouseGas:
 class Province:
     """ A class representing the greenhouse gas emission data of a specific region
     in Canada (a province or territory)
+
+    Instance attributes:
+        - co2: a list representing the amount of co2 emissions for the given
+               region in chronological order
+        - ch4: a list representing the amount of ch4 emissions for the given
+               region in chronological order
+        - hfc: a list representing the amount of hfc emissions for the given
+               region in chronological order
+        - pfc: a list representing the amount of pfc emissions for the given
+               region in chronological order
+        - sf6: a list representing the amount of sf6 emissions for the given
+               region in chronological order
+        - nf3: a list representing the amount of nf3 emissions for the given
+               region in chronological order
+        - total: the total amount of greenhouse gas emissions in data
+
+    Representation Invariants:
+        - all(attribute != [] for attribute in
+              [self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3])
     """
+    co2: List[float]
+    ch4: List[float]
+    n2o: List[float]
+    hfc: List[float]
+    pfc: List[float]
+    sf6: List[float]
+    nf3: List[float]
+    total: List[float]
+
     # Private Attributes
     _data: List[GreenhouseGas]  # total GHG data of the province
     _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
-    # Public Attributes
-    # co2: List[float]
-    # ch4: List[float]
-    # n2o: List[float]
-    # hfc: List[float]
-    # pfc: List[float]
-    # sf6: List[float]
-    # nf3: List[float]
-    # total: List[float]
 
     def __init__(self, data: List[GreenhouseGas]) -> None:
         self._data = data
         self._dict_data = self._sort_ghg_data()
 
-        # self.co2 = self.adjust_list(1990, 2016, 0)
-        # self.ch4 = self.adjust_list(1990, 2016, 1)
-        # self.n2o = self.adjust_list(1990, 2016, 2)
-        # self.hfc = self.adjust_list(1990, 2016, 3)
-        # self.pfc = self.adjust_list(1990, 2016, 4)
-        # self.sf6 = self.adjust_list(1990, 2016, 5)
-        # self.nf3 = self.adjust_list(1990, 2016, 6)
-        # self.total = self.adjust_list(1990, 2016, 7)
+        self.co2 = self.adjust_list(1990, 2016, 0)
+        self.ch4 = self.adjust_list(1990, 2016, 1)
+        self.n2o = self.adjust_list(1990, 2016, 2)
+        self.hfc = self.adjust_list(1990, 2016, 3)
+        self.pfc = self.adjust_list(1990, 2016, 4)
+        self.sf6 = self.adjust_list(1990, 2016, 5)
+        self.nf3 = self.adjust_list(1990, 2016, 6)
+        self.total = self.adjust_list(1990, 2016, 7)
 
     def _sort_ghg_data(self) -> Dict[int, List[float]]:
         """ Return a dictionary mapping year to a list of greenhouse gas
