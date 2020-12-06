@@ -40,7 +40,7 @@ class Province:
     """
     # Private Attributes
     _data: List[GreenhouseGas]  # total GHG data of the province
-    dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
+    _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
     # Public Attributes
     # co2: List[float]
@@ -54,7 +54,7 @@ class Province:
 
     def __init__(self, data: List[GreenhouseGas]) -> None:
         self._data = data
-        self.dict_data = self._sort_ghg_data()
+        self._dict_data = self._sort_ghg_data()
 
         # self.co2 = self.adjust_list(1990, 2016, 0)
         # self.ch4 = self.adjust_list(1990, 2016, 1)
@@ -86,8 +86,7 @@ class Province:
 
     def adjust_list(self, start: int, end: int, index: int) -> List[float]:
         """ Return a list representing the data of a specific greenhouse gas
-        emissions for self, which starts from <start> year and ends on <end> year
-        in chronological order.
+        emissions for self which starts from the year <start> and ends on <end>.
 
         The index is based off of the order which the greenhouse gasses appear
         in the dictionary values.
@@ -110,7 +109,7 @@ class Province:
         """
         trimmed_list = []
         for year in range(start, end + 1):
-            trimmed_list.append(self.dict_data[year][index])
+            trimmed_list.append(self._dict_data[year][index])
 
         return trimmed_list
 
