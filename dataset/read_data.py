@@ -39,7 +39,7 @@ class Province:
     in Canada (a province or territory)
     """
     # Private Attributes
-    _data: List[GreenhouseGas]  # total GHG data
+    _data: List[GreenhouseGas]  # total GHG data of the province
     _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
     # Public Attributes
@@ -148,8 +148,8 @@ class Bird:
         self.list_data = _data_to_list(self.dict_data)
 
     def adjust_data(self, start: int, end: int) -> None:
-        """ Create a new dict that contains all bird data from the year <start> to
-        the year <end> and reassign self.data to it.
+        """ Adjust self.list_data to start from the year <start> to
+        the year <end>.
 
         Preconditions:
          - start < end
@@ -283,6 +283,7 @@ def _data_to_list(data: Dict[int, float]) -> list:
     start = min(data)
     end = max(data) + 1
     return [data[year] for year in range(start, end)]
+
 
 if __name__ == '__main__':
     # import python_ta
