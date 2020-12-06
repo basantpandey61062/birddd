@@ -1,3 +1,8 @@
+"""
+Module that contains class and functions for computations
+and the creation of regression models
+"""
+
 import numpy as np
 import pandas
 import plotly.graph_objects as go

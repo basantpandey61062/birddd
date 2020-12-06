@@ -1,3 +1,7 @@
+"""
+Module that contains classes and functions which
+read and process the data
+"""
 import csv
 from dataclasses import dataclass
 from typing import List, Dict
@@ -33,56 +37,33 @@ class GreenhouseGas:
 class Province:
     """ A class representing the greenhouse gas emission data of a specific region
     in Canada (a province or territory)
-
-    Instance attributes:
-     - name: name of the region of the given data
-     - co2: a list representing the amount of co2 emissions for the given
-            region in chronological order
-     - ch4: a list representing the amount of ch4 emissions for the given
-            region in chronological order
-     - hfc: a list representing the amount of hfc emissions for the given
-            region in chronological order
-     - pfc: a list representing the amount of pfc emissions for the given
-            region in chronological order
-     - sf6: a list representing the amount of sf6 emissions for the given
-            region in chronological order
-     - nf3: a list representing the amount of nf3 emissions for the given
-            region in chronological order
-     - total: the total amount of greenhouse gas emissions in data
-
-    Representation Invariants:
-     - self.name != ''
-     - all(value <=  for value in self.co2)
     """
-
     # Private Attributes
     _data: List[GreenhouseGas]  # total GHG data
     _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
     # Public Attributes
-    name: str
-    co2: List[float]
-    ch4: List[float]
-    n2o: List[float]
-    hfc: List[float]
-    pfc: List[float]
-    sf6: List[float]
-    nf3: List[float]
-    total: List[float]
+    # co2: List[float]
+    # ch4: List[float]
+    # n2o: List[float]
+    # hfc: List[float]
+    # pfc: List[float]
+    # sf6: List[float]
+    # nf3: List[float]
+    # total: List[float]
 
     def __init__(self, data: List[GreenhouseGas]) -> None:
-        self.name = data[0].region
         self._data = data
         self._dict_data = self._sort_ghg_data()
 
-        self.co2 = self.adjust_list(1990, 2016, 0)
-        self.ch4 = self.adjust_list(1990, 2016, 1)
-        self.n2o = self.adjust_list(1990, 2016, 2)
-        self.hfc = self.adjust_list(1990, 2016, 3)
-        self.pfc = self.adjust_list(1990, 2016, 4)
-        self.sf6 = self.adjust_list(1990, 2016, 5)
-        self.nf3 = self.adjust_list(1990, 2016, 6)
-        self.total = self.adjust_list(1990, 2016, 7)
+        # self.co2 = self.adjust_list(1990, 2016, 0)
+        # self.ch4 = self.adjust_list(1990, 2016, 1)
+        # self.n2o = self.adjust_list(1990, 2016, 2)
+        # self.hfc = self.adjust_list(1990, 2016, 3)
+        # self.pfc = self.adjust_list(1990, 2016, 4)
+        # self.sf6 = self.adjust_list(1990, 2016, 5)
+        # self.nf3 = self.adjust_list(1990, 2016, 6)
+        # self.total = self.adjust_list(1990, 2016, 7)
 
     def _sort_ghg_data(self) -> Dict[int, List[float]]:
         """ Return a dictionary mapping year to a list of greenhouse gas
@@ -105,7 +86,8 @@ class Province:
 
     def adjust_list(self, start: int, end: int, index: int) -> List[float]:
         """ Return a list representing the data of a specific greenhouse gas
-        emissions for self, which starts from <start> year and ends on <end> year.
+        emissions for self, which starts from <start> year and ends on <end> year
+        in chronological order.
 
         The index is based off of the order which the greenhouse gasses appear
         in the dictionary values.
@@ -137,18 +119,18 @@ class Bird:
     """ An class representing a the data of a bird species
 
     Instance Attributes:
-     - dict_data: mapping of year to index of change since 1970 for
-                  the given bird species
+        - dict_data: mapping of year to index of change since 1970 for
+                     the given bird species
 
-     - list_data: list of all indexes of change since 1970,
-                  ordered by year (oldest data to most recent)
+        - list_data: list of all indexes of change since 1970,
+                     ordered by year (oldest data to most recent)
 
     Representation Invariants:
-     - min(self.dict_data) >= 1990
-     - max(self.dict_data) <= 2016
-     - all(is_instance(self.dict_data[year], float) or self.dict_data[year] == 'n/a'
-           for year in self.dict_data)
-     - all(element in self.dict_data.values() element in self.list_data)
+        - min(self.dict_data) >= 1990
+        - max(self.dict_data) <= 2016
+        - len(list_data) <= len(dict_data)
+        - all(year in self.dict_data for year in range(1990, 2016))
+        - all(element in self.dict_data.values() for element in self.list_data)
 
     Sample Usage:
     >>> bird_data = {year: year for year in range(1990, 2017)}
@@ -158,66 +140,34 @@ class Bird:
     >>> bird.list_data == [n for n in range(1990, 2017)]
     True
     """
-    dict_data: Dict[int, any]  # where any is either a float or 'n/a'
+    dict_data: Dict[int, float]
     list_data: list
 
     def __init__(self, bird_data: dict) -> None:
         self.dict_data = bird_data
-        self.list_data = self._data_to_list()
+        self.list_data = _data_to_list(self.dict_data)
 
-    def trim_data(self, start: int, end: int) -> None:
+    def adjust_data(self, start: int, end: int) -> None:
         """ Create a new dict that contains all bird data from the year <start> to
         the year <end> and reassign self.data to it.
-
-        Note: After the data is trimmed it cannot be reverted or untrimmed.
 
         Preconditions:
          - start < end
          - 1970 <= end <= 2016
          - 1970 <= start <= 2016
 
-        >>> bird_data = {year: 0.0 for year in range(1990, 2017)}  # an example possible data
+        >>> bird_data = {1999: 1.0, 2000: 2.0, 2001: 3.0, 2002: 4.0}  # an example possible data
         >>> bird = Bird(bird_data)
-        >>> bird.trim_data(2000, 2001)
-        >>> bird.dict_data
-        {2000: 0.0, 2001: 0.0}
+        >>> bird.list_data == [1, 2, 3, 4]
+        True
+        >>> bird.adjust_data(2000, 2001)
+        >>> bird.list_data
+        [2.0, 3.0]
         """
-        self.dict_data = {year: self.dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
-        self.list_data = self._data_to_list()
-
-    def find_first_point(self) -> int:
-        """ Return the first year where the data is not 'n/a'
-
-        >>> bird_data = {year: 'n/a' for year in range(1990, 2016)}
-        >>> bird_data[2016] = 0.0
-        >>> bird = Bird(bird_data)
-        >>> bird.find_first_point()
-        2016
-        """
-        for year in self.dict_data:
-            if self.dict_data[year] != 'n/a':
-                return year
-
-    def _data_to_list(self) -> list:
-        """ Return a list containing all the datapoints in data ordered by year
-
-        This is a private method used to initialize list_data
-
-        The function isn't for the user to use. The doctest below is just to exemplify
-        how the function works.
-
-        >>> bird = Bird({2002: 0.0, 2003: 1.0, 2004: 2.0})
-        >>> bird.list_data
-        [0.0, 1.0, 2.0]
-        >>> bird.trim_data(2002, 2003)
-        >>> bird.list_data
-        [0.0, 1.0]
-        """
-        start = min(self.dict_data)
-        end = max(self.dict_data) + 1
-        return [self.dict_data[year] for year in range(start, end)]
+        self.list_data = _data_to_list(adjusted_dict)
 
 
 def read_ghg_data(last_row: int) -> Dict[str, List[GreenhouseGas]]:
@@ -268,7 +218,7 @@ def read_ghg_data(last_row: int) -> Dict[str, List[GreenhouseGas]]:
 
 def read_bird_data() -> Dict[int, List[str]]:
     """ Read the 'bird_data.csv' file and Return a dictionary
-    mapping each year to a list of corresponding row of bird data
+    mapping each year to a list representing a row of bird data
     """
     with open('bird_data.csv') as csvfile:
         reader = csv.reader(csvfile)
@@ -292,42 +242,59 @@ def read_bird_data() -> Dict[int, List[str]]:
     return bird_data
 
 
-def filter_bird_data(bird_data: Dict[int, List[str]], column: int) -> Dict[int, any]:
-    """ Return a dictionary mapping the years in bird_data to a
-    specific column in the data
+def filter_bird_data(bird_data: Dict[int, List[str]], column: int) -> Dict[int, float]:
+    """ Return a dictionary mapping the years between 1990-2016 inclusive in bird_data
+    to a specific column in the data
 
         Preconditions:
-         - 0 <= column <= 8
+            - 0 <= column <= 8
+            - all(year in bird_data for year in range(1990, 2017))
 
-    >>> filter_bird_data({2002: ['0.0', '1.0', '2.0', '3.0', '4.0', '5.0'],\
-                          2003: ['0.0', '1.0', '2.0', '3.0', '4.0', '5.0'] }, 0)
-    {2002: 0.0, 2003: 0.0}
-    >>> filter_bird_data({2002: ['0.0', '1.0', '2.0', '3.0', '4.0', '5.0'],\
-                          2003: ['n/a', '1.0', '2.0', '3.0', '4.0', '5.0'] }, 0)
-    {2002: 0.0, 2003: 'n/a'}
+    >>> data = {year: ['0.0', '1.0', '2.0', '3.0'] for year in range(1970, 2020)}
+    >>> filtered_data = filter_bird_data(data, 0)
+    >>> filtered_data == {year: 0.0 for year in range(1990, 2017)}
+    True
+    >>> filtered_data = filter_bird_data(data, 1)
+    >>> filtered_data == {year: 1.0 for year in range(1990, 2017)}
+    True
     """
     filtered_dict = {}
-    for year in bird_data:
+    for year in range(1990, 2017):
         column_data = bird_data[year][column]
-        if column_data != 'n/a':
-            filtered_dict[year] = float(column_data)
-        else:
-            filtered_dict[year] = 'n/a'
+        filtered_dict[year] = float(column_data)
 
     return filtered_dict
 
 
-if __name__ == '__main__':
-#     import python_ta
-#     python_ta.check_all(config={
-#         'max-line-length': 100,
-#         'extra-imports': ['python_ta.contracts', 'dataclasses', 'datetime'],
-#         'disable': ['R1705', 'C0200'],
-#     })
+# helper function
+def _data_to_list(data: Dict[int, float]) -> list:
+    """ Return a list containing all the datapoints in data ordered by year
 
-#     import python_ta.contracts
-#     python_ta.contracts.DEBUG_CONTRACTS = False
-#     python_ta.contracts.check_all_contracts()
+    The function isn't for the user to use. The doctest below is just to exemplify
+    how the function works.
+
+    >>> bird = Bird({2002: 0.0, 2003: 1.0, 2004: 2.0})
+    >>> bird.list_data
+    [0.0, 1.0, 2.0]
+    >>> bird.adjust_data(2002, 2003)
+    >>> bird.list_data
+    [0.0, 1.0]
+    """
+    start = min(data)
+    end = max(data) + 1
+    return [data[year] for year in range(start, end)]
+
+if __name__ == '__main__':
+    # import python_ta
+    # python_ta.check_all(config={
+    #     'max-line-length': 100,
+    #     'extra-imports': ['python_ta.contracts', 'dataclasses', 'datetime'],
+    #     'disable': ['R1705', 'C0200'],
+    # })
+
+    # import python_ta.contracts
+    # python_ta.contracts.DEBUG_CONTRACTS = False
+    # python_ta.contracts.check_all_contracts()
 
     import doctest
     doctest.testmod()
