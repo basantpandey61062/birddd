@@ -119,9 +119,6 @@ class Bird:
     """ An class representing a the data of a bird species
 
     Instance Attributes:
-        - dict_data: mapping of year to index of change since 1970 for
-                     the given bird species
-
         - list_data: list of all indexes of change since 1970,
                      ordered by year (oldest data to most recent)
 
@@ -135,17 +132,17 @@ class Bird:
     Sample Usage:
     >>> bird_data = {year: year for year in range(1990, 2017)}
     >>> bird = Bird(bird_data)
-    >>> bird.dict_data == {year: year for year in range(1990, 2017)}
-    True
     >>> bird.list_data == [n for n in range(1990, 2017)]
     True
     """
-    dict_data: Dict[int, float]
     list_data: list
 
+    # Private Attributes
+    _dict_data: Dict[int, float]  # dictionary mapping year to the bird's index of change
+
     def __init__(self, bird_data: dict) -> None:
-        self.dict_data = bird_data
-        self.list_data = _data_to_list(self.dict_data)
+        self._dict_data = bird_data
+        self.list_data = _data_to_list(self._dict_data)
 
     def adjust_data(self, start: int, end: int) -> None:
         """ Adjust self.list_data to start from the year <start> to
@@ -153,8 +150,8 @@ class Bird:
 
         Preconditions:
          - start < end
-         - 1970 <= end <= 2016
-         - 1970 <= start <= 2016
+         - 1990 <= end <= 2016
+         - 1990 <= start <= 2016
 
         >>> bird_data = {1999: 1.0, 2000: 2.0, 2001: 3.0, 2002: 4.0}  # an example possible data
         >>> bird = Bird(bird_data)
@@ -164,7 +161,7 @@ class Bird:
         >>> bird.list_data
         [2.0, 3.0]
         """
-        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
         self.list_data = _data_to_list(adjusted_dict)
@@ -273,12 +270,9 @@ def _data_to_list(data: Dict[int, float]) -> list:
     The function isn't for the user to use. The doctest below is just to exemplify
     how the function works.
 
-    >>> bird = Bird({2002: 0.0, 2003: 1.0, 2004: 2.0})
-    >>> bird.list_data
+    >>> data = {2000: 0.0, 2001: 1.0, 2002: 2.0}
+    >>> _data_to_list(data)
     [0.0, 1.0, 2.0]
-    >>> bird.adjust_data(2002, 2003)
-    >>> bird.list_data
-    [0.0, 1.0]
     """
     start = min(data)
     end = max(data) + 1
