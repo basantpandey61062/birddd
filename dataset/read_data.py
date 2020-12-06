@@ -40,7 +40,7 @@ class Province:
     """
     # Private Attributes
     _data: List[GreenhouseGas]  # total GHG data of the province
-    _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
+    dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
     # Public Attributes
     # co2: List[float]
@@ -54,7 +54,7 @@ class Province:
 
     def __init__(self, data: List[GreenhouseGas]) -> None:
         self._data = data
-        self._dict_data = self._sort_ghg_data()
+        self.dict_data = self._sort_ghg_data()
 
         # self.co2 = self.adjust_list(1990, 2016, 0)
         # self.ch4 = self.adjust_list(1990, 2016, 1)
@@ -69,7 +69,7 @@ class Province:
         """ Return a dictionary mapping year to a list of greenhouse gas
         emissions for that year
 
-        Note: This is a private method used only to initialize _dict_data.
+        Note: This is a private method used only to initialize dict_data.
         """
         sorted_dict = {}
         for row in self._data:
@@ -110,7 +110,7 @@ class Province:
         """
         trimmed_list = []
         for year in range(start, end + 1):
-            trimmed_list.append(self._dict_data[year][index])
+            trimmed_list.append(self.dict_data[year][index])
 
         return trimmed_list
 
@@ -119,6 +119,8 @@ class Bird:
     """ An class representing a the data of a bird species
 
     Instance Attributes:
+        - dict_data: mapping of year to index of change since 1970 for
+                     the given bird species
         - list_data: list of all indexes of change since 1970,
                      ordered by year (oldest data to most recent)
 
@@ -130,19 +132,22 @@ class Bird:
         - all(element in self.dict_data.values() for element in self.list_data)
 
     Sample Usage:
-    >>> bird_data = {year: year for year in range(1990, 2017)}
+    >>> bird_data = {year: float(year) for year in range(1990, 2017)}
     >>> bird = Bird(bird_data)
-    >>> bird.list_data == [n for n in range(1990, 2017)]
+    >>> bird.dict_data == {year: year for year in range(1990, 2017)}
     True
+    >>> bird.list_data == [float(n) for n in range(1990, 2017)]
+    True
+    >>> bird.adjust_data(2000, 2001)
+    >>> bird.list_data
+    [2000.0, 2001.0]
     """
+    dict_data: Dict[int, float]  # dictionary mapping year to the bird's index of change
     list_data: list
 
-    # Private Attributes
-    _dict_data: Dict[int, float]  # dictionary mapping year to the bird's index of change
-
     def __init__(self, bird_data: dict) -> None:
-        self._dict_data = bird_data
-        self.list_data = _data_to_list(self._dict_data)
+        self.dict_data = bird_data
+        self.list_data = _data_to_list(self.dict_data)
 
     def adjust_data(self, start: int, end: int) -> None:
         """ Adjust self.list_data to start from the year <start> to
@@ -155,13 +160,13 @@ class Bird:
 
         >>> bird_data = {1999: 1.0, 2000: 2.0, 2001: 3.0, 2002: 4.0}  # an example possible data
         >>> bird = Bird(bird_data)
-        >>> bird.list_data == [1, 2, 3, 4]
+        >>> bird.list_data == [1.0, 2.0, 3.0, 4.0]
         True
         >>> bird.adjust_data(2000, 2001)
         >>> bird.list_data
         [2.0, 3.0]
         """
-        adjusted_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
         self.list_data = _data_to_list(adjusted_dict)
