@@ -70,7 +70,6 @@ class Province:
     _data: List[GreenhouseGas]  # total GHG data of the province
     _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
 
-
     def __init__(self, data: List[GreenhouseGas]) -> None:
         self._data = data
         self._dict_data = self._sort_ghg_data()
@@ -160,7 +159,7 @@ class Bird:
     >>> bird.list_data
     [2000.0, 2001.0]
     """
-    dict_data: Dict[int, float]  # dictionary mapping year to the bird's index of change
+    dict_data: Dict[int, float]
     list_data: list
 
     def __init__(self, bird_data: dict) -> None:
@@ -270,12 +269,12 @@ def filter_bird_data(bird_data: Dict[int, List[str]], column: int) -> Dict[int, 
             - 0 <= column <= 8
             - all(year in bird_data for year in range(1990, 2017))
 
-    >>> data = {year: ['0.0', '1.0', '2.0', '3.0'] for year in range(1970, 2020)}
+    >>> data = {yr: ['0.0', '1.0', '2.0', '3.0'] for yr in range(1970, 2020)}
     >>> filtered_data = filter_bird_data(data, 0)
-    >>> filtered_data == {year: 0.0 for year in range(1990, 2017)}
+    >>> filtered_data == {yr: 0.0 for yr in range(1990, 2017)}
     True
     >>> filtered_data = filter_bird_data(data, 1)
-    >>> filtered_data == {year: 1.0 for year in range(1990, 2017)}
+    >>> filtered_data == {yr: 1.0 for yr in range(1990, 2017)}
     True
     """
     filtered_dict = {}
@@ -293,8 +292,8 @@ def _data_to_list(data: Dict[int, float]) -> list:
     The function isn't for the user to use. The doctest below is just to exemplify
     how the function works.
 
-    >>> data = {2000: 0.0, 2001: 1.0, 2002: 2.0}
-    >>> _data_to_list(data)
+    >>> example_data = {2000: 0.0, 2001: 1.0, 2002: 2.0}
+    >>> _data_to_list(example_data)
     [0.0, 1.0, 2.0]
     """
     start = min(data)

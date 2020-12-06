@@ -2,7 +2,6 @@
 Module that contains class and functions for computations
 and the creation of regression models
 """
-
 import numpy as np
 import pandas
 import plotly.graph_objects as go
@@ -52,6 +51,7 @@ class RegressionModel:
         return (y - b) / m
 
     def get_r_squared(self) -> float:
+        """"Return a float representing the r squared value of the model"""
         x, y = _lists_to_array(self._ghg_data, self._bird_data)
         return self._model.score(x, y)
 
@@ -64,7 +64,7 @@ class RegressionModel:
                    self.predict_y(x_range[1])]
         fig = px.scatter(x=self._ghg_data,
                          y=self._bird_data,
-                         title= f'{title} {" " * 10} R^2 = {self.get_r_squared()}',
+                         title=f'{title} {" " * 10} R^2 = {self.get_r_squared()}',
                          labels={'x': x_label,
                                  'y': y_label})
 
@@ -81,6 +81,8 @@ def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
     y_array = np.array(y)
 
     return (x_array, y_array)
+
+
 ########################################################################################################################
 # Example Usage
 ########################################################################################################################
