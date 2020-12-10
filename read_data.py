@@ -67,13 +67,16 @@ class Region:
     total: List[float]
 
     # Private Attributes
-    _data: List[GreenhouseGas]  # total GHG data of the province
-    _dict_data: Dict[int, List[float]]  # mapping of year to GHG emissions for that year
+    #     - _data: a list of all the GHG data of the province per year
+    #     - _dict_data: mapping of year to GHG emissions for that year
+    _data: List[GreenhouseGas]
+    _dict_data: Dict[int, List[float]]
 
     def __init__(self, data: List[GreenhouseGas]) -> None:
         self._data = data
         self._dict_data = self._sort_ghg_data()
 
+        # Initializing the lists for multiple regression
         self.co2 = self.adjust_list(1990, 2016, 0)
         self.ch4 = self.adjust_list(1990, 2016, 1)
         self.n2o = self.adjust_list(1990, 2016, 2)
@@ -174,11 +177,14 @@ class Bird:
     >>> bird.list_data
     [2000.0, 2001.0]
     """
-    dict_data: Dict[int, float]
     list_data: list
 
+    # Private Attribute
+    #   - _dict_data: a dictionary mapping year to the percentage change
+    _dict_data: Dict[int, float]
+
     def __init__(self, bird_data: dict) -> None:
-        self.dict_data = bird_data
+        self._dict_data = bird_data
         self.list_data = _data_to_list(bird_data)
 
     def adjust_data(self, start: int, end: int) -> None:
@@ -198,7 +204,7 @@ class Bird:
         >>> bird.list_data
         [2.0, 3.0]
         """
-        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
         self.list_data = _data_to_list(adjusted_dict)
