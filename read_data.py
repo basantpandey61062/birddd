@@ -177,13 +177,10 @@ class Bird:
     [2000.0, 2001.0]
     """
     list_data: list
-
-    # Private Attribute
-    #   - _dict_data: a dictionary mapping year to the percentage change
-    _dict_data: Dict[int, float]
+    dict_data: Dict[int, float]
 
     def __init__(self, bird_data: dict) -> None:
-        self._dict_data = bird_data
+        self.dict_data = bird_data
         self.list_data = _data_to_list(bird_data)
 
     def adjust_data(self, start: int, end: int) -> None:
@@ -203,7 +200,7 @@ class Bird:
         >>> bird.list_data
         [2.0, 3.0]
         """
-        adjusted_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
         self.list_data = _data_to_list(adjusted_dict)
