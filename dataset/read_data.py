@@ -34,7 +34,7 @@ class GreenhouseGas:
     total: float
 
 
-class Province:
+class Region:
     """ A class representing the greenhouse gas emission data of a specific region
     in Canada (a province or territory)
 
@@ -131,19 +131,19 @@ class Province:
             trimmed_list.append(self._dict_data[year][index])
 
         # updating the corresponding instance attribute
-        self._update_list(trimmed_list, index)
+        # self._update_list(trimmed_list, index)
 
         return trimmed_list
 
-    def _update_list(self, updated_list: List[float], index: int) -> None:
-        """ Update the greenhouse gas attribute to match the adjusted version
-        """
-        list_mapping = {0: self.co2, 1: self.ch4,
-                        2: self.n2o, 3: self.hfc,
-                        4: self.pfc, 5: self.sf6,
-                        7: self.nf3, 8: self.total}
+    # def _update_list(self, updated_list: List[float], index: int) -> None:
+    #     """ Update the greenhouse gas attribute to match the adjusted version
+    #     """
+    #     list_mapping = {0: self.co2, 1: self.ch4,
+    #                     2: self.n2o, 3: self.hfc,
+    #                     4: self.pfc, 5: self.sf6,
+    #                     7: self.nf3, 8: self.total}
 
-        list_mapping[index] = updated_list
+    #     list_mapping[index] = updated_list
 
 
 
@@ -179,7 +179,7 @@ class Bird:
 
     def __init__(self, bird_data: dict) -> None:
         self.dict_data = bird_data
-        self.list_data = _data_to_list(self.dict_data)
+        self.list_data = _data_to_list(bird_data)
 
     def adjust_data(self, start: int, end: int) -> None:
         """ Adjust self.list_data to start from the year <start> to
