@@ -149,7 +149,6 @@ class Region:
     #     list_mapping[index] = updated_list
 
 
-
 class Bird:
     """ An class representing a the data of a bird species
 
