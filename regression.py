@@ -87,7 +87,14 @@ class RegressionModel:
 
 
 class MultipleRegression:
-    """Class Representing the multiple regression model for the given data"""
+    """Class Representing the multiple regression model for the given data
+
+    Instance Attributes:
+        - coef: a dictionary mapping the name of the GHG to the corresponding
+          coefficient/weighting
+    """
+    coef: Dict[str, float]
+
     # Private Attributes
     #   - _model: the multiple regression model
     #   -_x_variables: a pandas Dataframe representing the given ghg data
@@ -104,6 +111,7 @@ class MultipleRegression:
         self._x_variables = pandas.DataFrame(x_variables)
         self._model = LinearRegression().fit(pandas.DataFrame(x_variables),
                                              y_values)
+        self.coef = self._get_coef()
 
     def predict_value(self,
                       co2: float,
@@ -119,19 +127,20 @@ class MultipleRegression:
         """
         return float(self._model.predict(co2, ch4, n2o, hfc, pfc, sf6, nf3))
 
-    def plot_coef(self, bird_name: str) -> None:
-        """Plot the coefficients with a bar graph"""
-        columns =[column.upper() for column in self._x_variables.columns]
-        rows = [float(row) for row in self._model.coef_]
+    def _get_coef(self) -> Dict[str, float]:
+        """Return a dictionary mapping the name of a greenhouse gas to
+        the multiple regression coefficient
+        """
+        coefficients = self._model.coef_
+        mapping = {'co2': coefficients[0],
+                   'ch4': coefficients[1],
+                   'n2o': coefficients[2],
+                   'hfc': coefficients[3],
+                   'pfc': coefficients[4],
+                   'sf6': coefficients[5],
+                   'nf3': coefficients[6]}
 
-        fig = px.bar(x=columns,
-                     y=rows,
-                     labels={'x': 'Greenhouse Gasses', 'y': 'Coefficient'},
-                     title=f'The weight of each Greenhouse gas on the percentage change of {bird_name} since 1970'
-
-        )
-
-        fig.show()
+        return mapping
 
 # Helper Function
 def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
@@ -147,16 +156,16 @@ def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
 ########################################################################################################################
 # Example Usage
 ########################################################################################################################
-# from read_data import *
+from read_data import *
 
-# ghg_data = read_ghg_data(398)  # reads the data
-# # # keys = ghg_data.keys()  # gets all the possible keys
-# # alberta = Province(ghg_data['Alberta'])  # creates a Province object
-# canada = Region(ghg_data['Canada'])
-# bird_data = read_bird_data()  # reads the bird data
-# bird_data = filter_bird_data(bird_data, 8)  # filters the bird data so that only column 8 remains
-# bird = Bird(bird_data)  # creates an Bird Object
-# bird.adjust_data(1990, 2016)  # trims the bird data to match the length of the GHG data
+ghg_data = read_ghg_data(398)  # reads the data
+# # keys = ghg_data.keys()  # gets all the possible keys
+# alberta = Province(ghg_data['Alberta'])  # creates a Province object
+canada = Region(ghg_data['Alberta'])
+bird_data = read_bird_data()  # reads the bird data
+bird_data = filter_bird_data(bird_data, 8)  # filters the bird data so that only column 8 remains
+bird = Bird(bird_data)  # creates an Bird Object
+bird.adjust_data(1990, 2016)  # trims the bird data to match the length of the GHG data
 # model = RegressionModel(canada.total, bird.list_data)  # creates the linear regression model
 # # model.predict_y(69)  # predicts the index of change of bird species for 69 kt of emission
 # model.plot_data('Test', 'x', 'y')  # plots the data
@@ -174,15 +183,15 @@ def _lists_to_array(x: list, y: list) -> Tuple[np.array, np.array]:
 #                         'pfc': canada.pfc,
 #                         'sf6': canada.sf6,
 #                         'nf3': canada.nf3})
-# canada.initialize_lists(1990, 2016)
-# x = {'co2': canada.co2,
-#     'ch4': canada.ch4,
-#     'n2o': canada.n2o,
-#     'hfc': canada.hfc,
-#     'pfc': canada.pfc,
-#     'sf6': canada.sf6,
-#     'nf3': canada.nf3}
+canada.initialize_lists(1990, 2016)
+x = {'co2': canada.co2,
+    'ch4': canada.ch4,
+    'n2o': canada.n2o,
+    'hfc': canada.hfc,
+    'pfc': canada.pfc,
+    'sf6': canada.sf6,
+    'nf3': canada.nf3}
 
-# model = MultipleRegression(x, bird.list_data)
-# print(model._model.coef_)
-# model.plot_coef('Title')
+model = MultipleRegression(x, bird.list_data)
+print(model._model.coef_)
+# model.plot()
