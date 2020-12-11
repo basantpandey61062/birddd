@@ -121,6 +121,9 @@ class MultipleRegression:
                     ) -> float:
         """ Return the estimated percentage change since 1970 of birds for the given
         greenhouse gas values base off of the LinearRegression Model.
+
+        Preconditions:
+            - all(value >= 0 for value in {co2, ch4, n2o, hfc, pfc, sf6, nf3})
         """
         return float(self._model.predict(co2, ch4, n2o, hfc, pfc, sf6, nf3))
 
