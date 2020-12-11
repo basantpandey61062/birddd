@@ -84,8 +84,6 @@ class RegressionModel:
         fig.show()
 
 
-
-
 class MultipleRegression:
     """Class Representing the multiple regression model for the given data
 
