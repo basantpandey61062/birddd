@@ -76,7 +76,6 @@ class Region:
         self._data = data
         self._dict_data = self._sort_ghg_data()
 
-
     def _sort_ghg_data(self) -> Dict[int, List[float]]:
         """ Return a dictionary mapping year to a list of greenhouse gas
         emissions for that year
@@ -126,9 +125,15 @@ class Region:
 
         return trimmed_list
 
-    def initialize_lists(self, start, end) -> None:
+    def initialize_lists(self, start: int, end: int) -> None:
         """ Initialize the lists for multiple regression. Mutate all instance attributes
-        so that they become lists
+        so that they become lists.
+
+         Preconditions:
+            - 0 <= index < 8
+            - start < end
+            - 1990 <= start <= 2016
+            - 1990 <= end <= 2016
         """
         self.co2 = self.adjust_list(start, end, 0)
         self.ch4 = self.adjust_list(start, end, 1)
