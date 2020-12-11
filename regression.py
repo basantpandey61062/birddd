@@ -95,9 +95,7 @@ class MultipleRegression:
 
     # Private Attributes
     #   - _model: the multiple regression model
-    #   -_x_variables: a pandas Dataframe representing the given ghg data
     _model: LinearRegression
-    _x_variables: pandas.DataFrame
 
     def __init__(self, x_variables: Dict[str, List[float]], y_values: List[float]) -> None:
         """Initialize the _model attribute
@@ -106,7 +104,6 @@ class MultipleRegression:
               representing the annual emissions of a region
             - y_values is a list of floats representing the index change for a species of birds
         """
-        self._x_variables = pandas.DataFrame(x_variables)
         self._model = LinearRegression().fit(pandas.DataFrame(x_variables), y_values)
         self.coef = self._get_coef()
 
