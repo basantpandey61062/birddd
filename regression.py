@@ -109,8 +109,7 @@ class MultipleRegression:
             - y_values is a list of floats representing the index change for a species of birds
         """
         self._x_variables = pandas.DataFrame(x_variables)
-        self._model = LinearRegression().fit(pandas.DataFrame(x_variables),
-                                             y_values)
+        self._model = LinearRegression().fit(pandas.DataFrame(x_variables), y_values)
         self.coef = self._get_coef()
 
     def predict_value(self,
