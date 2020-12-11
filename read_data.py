@@ -4,7 +4,7 @@ read and process the data
 """
 import csv
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 @dataclass
@@ -57,14 +57,14 @@ class Region:
         - all(attribute != [] for attribute in
               [self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3])
     """
-    co2: List[float]
-    ch4: List[float]
-    n2o: List[float]
-    hfc: List[float]
-    pfc: List[float]
-    sf6: List[float]
-    nf3: List[float]
-    total: List[float]
+    co2: Optional[List[float]] = None
+    ch4: Optional[List[float]] = None
+    n2o: Optional[List[float]] = None
+    hfc: Optional[List[float]] = None
+    pfc: Optional[List[float]] = None
+    sf6: Optional[List[float]] = None
+    nf3: Optional[List[float]] = None
+    total: Optional[List[float]] = None
 
     # Private Attributes
     #     - _data: a list of all the GHG data of the province per year
@@ -76,15 +76,6 @@ class Region:
         self._data = data
         self._dict_data = self._sort_ghg_data()
 
-        # Initializing the lists for multiple regression
-        self.co2 = self.adjust_list(1990, 2016, 0)
-        self.ch4 = self.adjust_list(1990, 2016, 1)
-        self.n2o = self.adjust_list(1990, 2016, 2)
-        self.hfc = self.adjust_list(1990, 2016, 3)
-        self.pfc = self.adjust_list(1990, 2016, 4)
-        self.sf6 = self.adjust_list(1990, 2016, 5)
-        self.nf3 = self.adjust_list(1990, 2016, 6)
-        self.total = self.adjust_list(1990, 2016, 7)
 
     def _sort_ghg_data(self) -> Dict[int, List[float]]:
         """ Return a dictionary mapping year to a list of greenhouse gas
@@ -133,20 +124,20 @@ class Region:
         for year in range(start, end + 1):
             trimmed_list.append(self._dict_data[year][index])
 
-        # updating the corresponding instance attribute
-        # self._update_list(trimmed_list, index)
-
         return trimmed_list
 
-    # def _update_list(self, updated_list: List[float], index: int) -> None:
-    #     """ Update the greenhouse gas attribute to match the adjusted version
-    #     """
-    #     list_mapping = {0: self.co2, 1: self.ch4,
-    #                     2: self.n2o, 3: self.hfc,
-    #                     4: self.pfc, 5: self.sf6,
-    #                     7: self.nf3, 8: self.total}
-
-    #     list_mapping[index] = updated_list
+    def initialize_lists(self, start, end) -> None:
+        """ Initialize the lists for multiple regression. Mutate all instance attributes
+        so that they become lists
+        """
+        self.co2 = self.adjust_list(start, end, 0)
+        self.ch4 = self.adjust_list(start, end, 1)
+        self.n2o = self.adjust_list(start, end, 2)
+        self.hfc = self.adjust_list(start, end, 3)
+        self.pfc = self.adjust_list(start, end, 4)
+        self.sf6 = self.adjust_list(start, end, 5)
+        self.nf3 = self.adjust_list(start, end, 6)
+        self.total = self.adjust_list(start, end, 7)
 
 
 class Bird:
