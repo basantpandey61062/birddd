@@ -174,15 +174,15 @@ bird.adjust_data(1990, 2016)  # trims the bird data to match the length of the G
 #                         'pfc': canada.pfc,
 #                         'sf6': canada.sf6,
 #                         'nf3': canada.nf3})
-canada.initialize_lists(1990, 2016)
-x = {'co2': canada.co2,
-    'ch4': canada.ch4,
-    'n2o': canada.n2o,
-    'hfc': canada.hfc,
-    'pfc': canada.pfc,
-    'sf6': canada.sf6,
-    'nf3': canada.nf3}
+# canada.initialize_lists(1990, 2016)
+# x = {'co2': canada.co2,
+#     'ch4': canada.ch4,
+#     'n2o': canada.n2o,
+#     'hfc': canada.hfc,
+#     'pfc': canada.pfc,
+#     'sf6': canada.sf6,
+#     'nf3': canada.nf3}
 
-model = MultipleRegression(x, bird.list_data)
-print(model._model.coef_)
-model.plot_coef('Title')
+# model = MultipleRegression(x, bird.list_data)
+# print(model._model.coef_)
+# model.plot_coef('Title')
