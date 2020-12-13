@@ -152,7 +152,10 @@ class InterfaceSystem:
         """Plots a graph based on current selections."""
         ghg_data, bird_data = self._datasets
         model = self._selection.get_model(ghg_data, bird_data)
-        model.plot_data('Percent Change in Bird population (from 1970) vs', 'x', 'y')
+        model.plot_data('Percent Change in Bird population (from 1970) vs '
+                        'Amount of Greenhouse gas produced in a year',
+                        'Amount of Greenhouse gas produced in a year (kt)',
+                        'Percent Change in Bird population (from 1970)')
 
     def _update_ghg_coefs(self) -> None:
         """Updates the names of buttons that display the greenhouse gases'
