@@ -7,7 +7,7 @@ for the main program.
 
 from typing import List
 import pygame
-from interface_objects import Button, InputButton, Page
+from modules.interface_objects import Button, InputButton, Page
 
 
 def create_pages() -> List[Page]:

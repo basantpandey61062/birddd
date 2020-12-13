@@ -7,8 +7,8 @@ Module Contains classes for program interface.
 from typing import Dict, List, Optional, Union
 from dataclasses import dataclass
 import pygame
-from read_data import Bird, GreenhouseGas, Region, filter_bird_data
-from regression import RegressionModel, MultipleRegression
+from modules.read_data import Bird, GreenhouseGas, Region, filter_bird_data
+from modules.regression import RegressionModel, MultipleRegression
 
 
 class Button:

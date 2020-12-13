@@ -9,9 +9,9 @@ import sys
 from typing import Dict, List, Optional, Tuple
 import pygame
 from pygame.locals import *
-from interface_objects import Button, InputButton, Page, Selection
-from read_data import GreenhouseGas
-from create_pages import create_pages
+from modules.interface_objects import Button, InputButton, Page, Selection
+from modules.read_data import GreenhouseGas
+from modules.create_pages import create_pages
 
 
 class InterfaceSystem:

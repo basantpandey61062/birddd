@@ -5,9 +5,9 @@ Module to with a function to run the main program.
 """
 
 import pygame
-from interface_objects import InputButton
-from interface_system import InterfaceSystem
-from read_data import read_bird_data, read_ghg_data
+from modules.interface_objects import InputButton
+from modules.interface_system import InterfaceSystem
+from modules.read_data import read_bird_data, read_ghg_data
 
 
 def run(i_system: InterfaceSystem) -> None:
