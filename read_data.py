@@ -67,8 +67,8 @@ class Region:
     total: Optional[List[float]] = None
 
     # Private Attributes
-    #     - _data: a list of all the GHG data of the province per year
-    #     - _dict_data: mapping of year to GHG emissions for that year
+    #   - _data: a list of all the GHG data of the province per year
+    #   - _dict_data: mapping of year to GHG emissions for that year
     _data: List[GreenhouseGas]
     _dict_data: Dict[int, List[float]]
 
@@ -80,7 +80,7 @@ class Region:
         """ Return a dictionary mapping year to a list of greenhouse gas
         emissions for that year
 
-        Note: This is a private method used only to initialize dict_data.
+        Note: This is a private method used only to initialize _dict_data.
         """
         sorted_dict = {}
         for row in self._data:
@@ -118,6 +118,23 @@ class Region:
          - start < end
          - 1990 <= start <= 2016
          - 1990 <= end <= 2016
+
+        >>> import math
+        >>> data = read_ghg_data(2)  # reads two rows of data
+        >>> alberta_data = data['Alberta']
+        >>> alberta_data[0].year  # first year is 1990
+        1990
+        >>> result = alberta_data[0].co2
+        >>> math.isclose(result, 129920.0044)  # the CO2 data from 1990
+        True
+        >>> alberta_data[1].year  # second year is 1991
+        1991
+        >>> alberta = Region(alberta_data)
+        >>> final_list = alberta.adjust_list(1990, 1990, 0)
+        >>> len(final_list) == 1
+        True
+        >>> math.isclose(final_list[0], 129920.0044)  # only data from 1990 remains
+        True
         """
         trimmed_list = []
         for year in range(start, end + 1):
@@ -149,22 +166,20 @@ class Bird:
     """ An class representing a the data of a bird species
 
     Instance Attributes:
-        - dict_data: mapping of year to index of change since 1970 for
-                     the given bird species
         - list_data: list of all indexes of change since 1970,
                      ordered by year (oldest data to most recent)
 
     Representation Invariants:
-        - min(self.dict_data) >= 1990
-        - max(self.dict_data) <= 2016
-        - len(list_data) <= len(dict_data)
-        - all(year in self.dict_data for year in range(1990, 2016))
-        - all(element in self.dict_data.values() for element in self.list_data)
+        - min(self._dict_data) >= 1990
+        - max(self._dict_data) <= 2016
+        - len(list_data) <= len(_dict_data)
+        - all(year in self._dict_data for year in range(1990, 2016))
+        - all(element in self._dict_data.values() for element in self.list_data)
 
     Sample Usage:
     >>> bird_data = {year: float(year) for year in range(1990, 2017)}
     >>> bird = Bird(bird_data)
-    >>> bird.dict_data == {year: year for year in range(1990, 2017)}
+    >>> bird._dict_data == {year: year for year in range(1990, 2017)}
     True
     >>> bird.list_data == [float(n) for n in range(1990, 2017)]
     True
@@ -173,10 +188,14 @@ class Bird:
     [2000.0, 2001.0]
     """
     list_data: list
-    dict_data: Dict[int, float]
 
-    def __init__(self, bird_data: dict) -> None:
-        self.dict_data = bird_data
+    # Private Attribute:
+    #     - _dict_data: mapping of year to index of change since 1970 for
+    #       the given bird species
+    _dict_data: Dict[int, float]
+
+    def __init__(self, bird_data: Dict[int, float]) -> None:
+        self._dict_data = bird_data
         self.list_data = _data_to_list(bird_data)
 
     def adjust_data(self, start: int, end: int) -> None:
@@ -196,7 +215,7 @@ class Bird:
         >>> bird.list_data
         [2.0, 3.0]
         """
-        adjusted_dict = {year: self.dict_data[year] for year in range(start, end + 1)}
+        adjusted_dict = {year: self._dict_data[year] for year in range(start, end + 1)}
 
         # updates the list attribute to match the trimmed data
         self.list_data = _data_to_list(adjusted_dict)
@@ -207,6 +226,10 @@ def read_ghg_data(last_row: int) -> Dict[str, List[GreenhouseGas]]:
     where each instance in the list represents a row in the data set.
 
     The function will read <last_row> number of rows
+
+    Preconditions:
+        - last_row >= 0
+        - last_row <= 398
 
     Note: The list of GreenhouseGas are ordered by year
     """
@@ -281,6 +304,12 @@ def filter_bird_data(bird_data: Dict[int, List[str]], column: int) -> Dict[int, 
         Preconditions:
             - 0 <= column <= 8
             - all(year in bird_data for year in range(1990, 2017))
+            - the dictionary passed into this function is directly
+              from the read_bird_data function
+
+    Note: In the doctest below a dictionary comprehension is used instead of the
+    actual bird data for simplicity. This is just used to show how the function works
+    and should not be implemented like this as it breaks the precondition.
 
     >>> data = {yr: ['0.0', '1.0', '2.0', '3.0'] for yr in range(1970, 2020)}
     >>> filtered_data = filter_bird_data(data, 0)
