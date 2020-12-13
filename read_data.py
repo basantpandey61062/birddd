@@ -54,8 +54,28 @@ class Region:
         - total: the total amount of greenhouse gas emissions in data
 
     Representation Invariants:
+        - the list of GreenhouseGas is a value from the dictionary returned by read_ghg_data
+
         - all(attribute != [] for attribute in
-              [self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3])
+              {self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3})
+
+        - all(len(element1) == len(element2) or (element1 == None and element2 == None)
+              for element1 in {self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3}
+              for element2 in {self.co2, self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3})
+
+        - all(type(self.co2) == type(element)
+              for element in {self.ch4, self.n2o, self.hfc, self.pfc, self.sf6, self.nf3})
+
+        - len(self._dict_data) >= len(self.co2) or self.co2 == None
+
+    Sample Usage:
+    >>> data = read_ghg_data(10)
+    >>> alberta = Region(data['Alberta'])
+    >>> alberta.co2 == None
+    True
+    >>> alberta.initialize_lists
+    >>> alberta.co2 == None
+    False
     """
     co2: Optional[List[float]] = None
     ch4: Optional[List[float]] = None
@@ -175,6 +195,8 @@ class Bird:
         - len(list_data) <= len(_dict_data)
         - all(year in self._dict_data for year in range(1990, 2016))
         - all(element in self._dict_data.values() for element in self.list_data)
+        - the dictionary passed into this class is directly returned from the
+          filter_bird_data function
 
     Sample Usage:
     >>> bird_data = {year: float(year) for year in range(1990, 2017)}
@@ -228,8 +250,7 @@ def read_ghg_data(last_row: int) -> Dict[str, List[GreenhouseGas]]:
     The function will read <last_row> number of rows
 
     Preconditions:
-        - last_row >= 0
-        - last_row <= 398
+        - 0 <= last_row <= 398
 
     Note: The list of GreenhouseGas are ordered by year
     """
