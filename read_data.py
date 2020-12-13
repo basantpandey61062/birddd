@@ -12,15 +12,18 @@ class GreenhouseGas:
     """ dataclass representing greenhouse gas emissions of a region in a given year
 
     Instance Attributes:
-     - year: year of the given data
-     - region: region of the given data
-     - co2: amount of co2 emissions in the given year for the given region
-     - ch4: amount of ch4 emissions in the given year for the given region
-     - hfc: amount of HPC emissions in the given year for the given region
-     - pfc: amount of PFC emissions in the given year for the given region
-     - sf6: amount of sf6 emissions in the given year for the given region
-     - nf3: amount of nf3 emissions in the given year for the given region
-     - total: the total amount of greenhouse gas emissions in data
+        - year: year of the given data
+        - region: region of the given data
+        - co2: amount of co2 emissions in the given year for the given region
+        - ch4: amount of ch4 emissions in the given year for the given region
+        - hfc: amount of HPC emissions in the given year for the given region
+        - pfc: amount of PFC emissions in the given year for the given region
+        - sf6: amount of sf6 emissions in the given year for the given region
+        - nf3: amount of nf3 emissions in the given year for the given region
+        - total: the total amount of greenhouse gas emissions in data
+
+    Representation Invariants:
+        - data passed into this function is directly from the 'GHG.csv' file
     """
     year: int
     region: str
