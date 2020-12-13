@@ -1,6 +1,4 @@
-# CSC110 Fall 2020: Python libraries we'll be using this semester.
-
-# Libraries Required to Run program
+# CSC110 Fall 2020:Libraries Required to Run program
 
 # Graphics and data visualization
 plotly==4.10.0
