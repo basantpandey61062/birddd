@@ -44,7 +44,8 @@ class Button:
             self.rect = self.text.get_rect()
 
     def update_name(self, name: str) -> None:
-        """Reassigns text attribute based on name."""
+        """Reassigns text attribute based on name.
+        """
         self.name = name
         self.text = self._font.render(self.name, True, (0, 0, 0))
 
@@ -53,7 +54,7 @@ class InputButton(Button):
     """A button that can hold inputs.
 
     Instance Attributes:
-        - tag: the type of button (two types: normal, display)
+        - tag: the type of button
         - name: the name of the button
         - text: a pygame surface that displays the name
         - image: the image of the button that will be displayed
@@ -96,7 +97,14 @@ class Page:
 
 
 class Selection:
-    """Class to store and handle user's selections."""
+    """Class to store and handle user's selections.
+
+    Representation Invariants:
+        - 0 <= self._bird <= 8
+        - 0 <= self._ghg <= 9
+
+    >>> my_selection = Selection()
+    """
 
     # Private Instance Attributes:
     #   - _region: the user selected region
@@ -114,7 +122,13 @@ class Selection:
 
     def handle_selection(self, current_page: int, selection: str) -> None:
         """Handles what selection the user chooses and updates instance attributes
-        accordingly."""
+        accordingly.
+
+        >>> my_selection = Selection()
+        >>> my_selection.handle_selection(0, 'Alberta')
+        >>> my_selection._region
+        'Alberta'
+        """
         if current_page == 0:
             self.change_region(selection)
         elif current_page == 1:
