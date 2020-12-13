@@ -64,7 +64,7 @@ def create_region_buttons(font: pygame.font.Font) -> List[Button]:
 
 def create_bird_buttons(font: pygame.font.Font, x_margin: int, y_margin: int,
                         grid_box_size: int) -> List[Button]:
-    """Creates a list of Button objects that represent birds."""
+    """Returns a list of Button objects that represent birds."""
     bird_names = ['Waterfowl', 'Birds of Prey', 'Wetland Birds', 'Seabirds', 'Forest Birds',
                   'Shorebirds', 'Grassland Birds', 'Aerial Insectivores', 'All Other Birds']
     bird_images = create_bird_images()
@@ -82,7 +82,7 @@ def create_bird_buttons(font: pygame.font.Font, x_margin: int, y_margin: int,
 
 def create_ghg_buttons(small_font: pygame.font.Font, large_font: pygame.font.Font,
                        x_margin: int, y_margin: int, grid_box_size: int) -> List[Button]:
-    """Creates a list of Button objects that represent greenhouse gases."""
+    """Returns a list of Button objects that represent greenhouse gases."""
     total = Button('normal', 'Total', large_font)
     multiple_regression = Button('normal', 'Multiple Regression', small_font)
 
@@ -100,7 +100,7 @@ def create_ghg_buttons(small_font: pygame.font.Font, large_font: pygame.font.Fon
 
 def create_page3_buttons(small_font: pygame.font.Font, large_font: pygame.font.Font,
                          window_width: int, window_height: int, x_margin: int) -> List[Button]:
-    """Creates a list of Button objects that should appear on page 3.
+    """Returns a list of Button objects that should appear on page 3.
 
     There is a button for inputting an amount of gas, a button for showing a graph, and
     a button for showing the estimated bird population change.
@@ -118,7 +118,7 @@ def create_page3_buttons(small_font: pygame.font.Font, large_font: pygame.font.F
 
 def create_page4_buttons(small_font: pygame.font.Font, large_font: pygame.font.Font,
                          window_width: int, window_height: int, x_margin: int) -> List[Button]:
-    """Creates a list of Button objects that should appear on page 4.
+    """Returns a list of Button objects that should appear on page 4.
 
     There is a button for showing the estimated bird population change, several buttons for
     inputting an amount of gas, and several buttons for showing multiple regression coefficients
@@ -144,7 +144,7 @@ def create_page4_buttons(small_font: pygame.font.Font, large_font: pygame.font.F
 
 
 def create_bird_images() -> List[pygame.Surface]:
-    """yaga"""
+    """Returns a list of bird images."""
     image_files = ['waterfowl.jpg', 'birds_of_prey.jpg', 'wetland_birds.jpg', 'seabirds.jpg',
                    'forest_birds.jpg', 'shorebirds.jpg', 'grassland_birds.jpg',
                    'aerial_insectivores.jpg', 'all_other_birds.png']
@@ -169,3 +169,4 @@ if __name__ == '__main__':
     import doctest
 
     doctest.testmod()
+
