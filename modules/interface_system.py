@@ -22,6 +22,9 @@ class InterfaceSystem:
         - current_page: a number indicating which page is currently displayed
         - mouse_pos: the coordinates of the mouse
         - mouse_clicked: whether the mouse is clicked or not
+
+    Representation Invariants:
+        - 0 <= self.current_page <= 4
     """
     # Private Instance Attributes:
     #   - _selection: holds the region, bird, and gas chosen by the user
@@ -196,7 +199,7 @@ class InterfaceSystem:
         button.update_name(button.prompt + ''.join(input_so_far))
 
     def _get_multiple_regression_inputs(self) -> List[float]:
-        """Returns a list of all of the gases to the quantities of gas the user inputted
+        """Returns a list of all the quantities of gas the user inputted
         for the multiple regression.
         """
         list_so_far = []
