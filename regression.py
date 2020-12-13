@@ -12,7 +12,6 @@ from typing import List, Tuple, Dict
 
 class RegressionModel:
     """ A class representing the linear regression model of the given data """
-
     # Private instance attributes
     #   -_model: the linear regression model
     #   -_ghg_data: a list of floats representing the ghg emissions of a region
@@ -25,10 +24,13 @@ class RegressionModel:
     def __init__(self, ghg_data: List[float], bird_data: List[float]) -> None:
         """ Initialize the RegressionModel
 
-        Preconditins:
+        Preconditions:
             - ghg_data is a list of floats representing the greenhouse gas emissions
-              of a region
-            - bird_data is a list of percentage changes for a specific bird species
+              of a region and is a value directly from the dictionary returned by the
+              read_ghg_data function
+
+            - bird_data is a list of percentage changes for a specific bird species and
+              is directly from the Bird class
         """
         self._bird_data = bird_data
         self._ghg_data = ghg_data
@@ -62,9 +64,9 @@ class RegressionModel:
         return (y - b) / m
 
     def get_r_squared(self) -> float:
-        """"Return a float representing the r squared value of the model"""
+        """Return a float representing the r squared value of the model"""
         x, y = _lists_to_array(self._ghg_data, self._bird_data)
-        return self._model.score(x, y)
+        return round(self._model.score(x, y), 6)
 
     def plot_data(self, title: str, x_label: str, y_label: str) -> None:
         """Plot the given data with a line of best fit generated from the
@@ -99,10 +101,13 @@ class MultipleRegression:
 
     def __init__(self, x_variables: Dict[str, List[float]], y_values: List[float]) -> None:
         """Initialize the _model attribute
+
         Preconditions:
             - x_variables is a dictionary mapping names of GHGs to a list of floats
               representing the annual emissions of a region
+
             - y_values is a list of floats representing the index change for a species of birds
+              and comes directly from the Bird class
         """
         self._model = LinearRegression().fit(pandas.DataFrame(x_variables), y_values)
         self.coef = self._get_coef()
